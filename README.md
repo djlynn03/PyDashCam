@@ -1,5 +1,5 @@
 # PyDashCam
-Dash cam software for a Raspberry Pi with a webcam
+Dash cam software for a Raspberry Pi with a webcam <br/>
 Should be compatible with most USB webcams
 
 # Features
