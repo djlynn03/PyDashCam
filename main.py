@@ -12,8 +12,8 @@ FRAMERATE = 30 # Frames per second
 # May need adjustment for different video size and framerate
 
 # KEEP_TIME = 14 * 24 * 60 * 60 # 14 days (in seconds)
-KEEP_TIME = 60 # 60 seconds
-MAX_FOOTAGE_SIZE = 100 # in MB
+KEEP_TIME = 30 # 60 seconds
+MAX_FOOTAGE_SIZE = 10 # in MB
 
 MODE = ['DEBUG', 'PROD'][0]
 RASPBERRY_PI_CONNECTED = MODE == 'PROD'
