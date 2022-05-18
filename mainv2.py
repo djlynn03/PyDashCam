@@ -15,7 +15,7 @@ FRAMERATE = 30 # Frames per second
 KEEP_TIME = 600 # 60 seconds
 MAX_FOOTAGE_SIZE = 100 # in MB
 
-MODE = ['DEBUG', 'PROD'][0]
+MODE = ['DEBUG', 'PROD'][1]
 RASPBERRY_PI_CONNECTED = MODE == 'PROD'
 
 
@@ -39,7 +39,7 @@ class Capture:
                 cv2.imshow('frame', self.frame)
 
             self.buffer.enqueue(self.frame)
-            self.buffer.foreach(self.save(self.buffer))
+            self.buffer.foreach(self.save())
             if not RASPBERRY_PI_CONNECTED:
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
@@ -64,14 +64,23 @@ class Capture:
         return
 
 vehicle_on = Button(2)
+global cap 
+cap = None
 
 def start_video():
     print("starting")
+    global cap
     cap = Capture(vehicle_on)
+
+def stop_video():
+    print("stopping")
+    global cap
+    del cap
     
 # Detect when the vehicle is running
 if RASPBERRY_PI_CONNECTED:
     vehicle_on.when_pressed = start_video
+    vehicle_on.when_released = stop_video
     while True:
         pass
 else:
