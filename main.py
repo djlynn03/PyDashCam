@@ -20,6 +20,7 @@ RASPBERRY_PI_CONNECTED = MODE == 'PROD'
 vehicle_on = Button(2)
 
 def start_video():
+    running = True
     print("starting")
     vid = cv2.VideoCapture(0)
 
@@ -34,12 +35,13 @@ def start_video():
     def stop():
         vid.release()
         print("stopping")
+        running = False
         return
     
     buffer = FrameQueue(FRAMERATE * VIDEO_LENGTH) # Buffer queue to contain the last n frames, where n = framerate * video length
-    vehicle_on.when_deactivated = stop
+    vehicle_on.when_released = stop
     
-    while vid.isOpened():
+    while vid.isOpened() and running:
         ret, frame = vid.read()
 
         cv2.putText(frame, datetime.datetime.now().strftime("%m/%d/%y %H:%M:%S"), (5, int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
@@ -49,13 +51,11 @@ def start_video():
 
         buffer.enqueue(frame)
         buffer.foreach(save(buffer))
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-        
-        
-        
-        clean_files(KEEP_TIME, MAX_FOOTAGE_SIZE)
+        if not RASPBERRY_PI_CONNECTED:
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+            
+        # clean_files(KEEP_TIME, MAX_FOOTAGE_SIZE)
 
     # while not buffer.is_empty():
     #     result.write(buffer.dequeue())
@@ -65,7 +65,7 @@ def start_video():
     
 # Detect when the vehicle is running
 if RASPBERRY_PI_CONNECTED:
-    vehicle_on.when_activated = start_video(vehicle_on)
+    vehicle_on.when_pressed = start_video()
     while True:
         pass
 else:
