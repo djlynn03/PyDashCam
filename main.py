@@ -15,12 +15,12 @@ FRAMERATE = 30 # Frames per second
 KEEP_TIME = 30 # 60 seconds
 MAX_FOOTAGE_SIZE = 10 # in MB
 
-MODE = ['DEBUG', 'PROD'][0]
+MODE = ['DEBUG', 'PROD'][1]
 RASPBERRY_PI_CONNECTED = MODE == 'PROD'
+vehicle_on = Button(2)
 
-
-def start_video(trigger=None):
-    
+def start_video():
+    print("starting")
     vid = cv2.VideoCapture(0)
 
     size = (int(vid.get(cv2.CAP_PROP_FRAME_WIDTH)), int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT)))
@@ -30,10 +30,14 @@ def start_video(trigger=None):
     def save(frame_queue):
         result.write(frame_queue.dequeue())
         return result
-
+    
+    def stop():
+        vid.release()
+        print("stopping")
+        return
+    
     buffer = FrameQueue(FRAMERATE * VIDEO_LENGTH) # Buffer queue to contain the last n frames, where n = framerate * video length
-    if trigger:
-        trigger.when_deactivated = vid.release()
+    vehicle_on.when_deactivated = stop
     
     while vid.isOpened():
         ret, frame = vid.read()
@@ -61,17 +65,17 @@ def start_video(trigger=None):
     
 # Detect when the vehicle is running
 if RASPBERRY_PI_CONNECTED:
-    vehicle_on = Button(2)
     vehicle_on.when_activated = start_video(vehicle_on)
+    while True:
+        pass
 else:
     while True:
         print("waiting")
         cv2.waitKey(0)
         print("started")
         start_video()
-        
     # vehicle_on.when_activated = set_state("RUNNING")
     
     # vehicle_on.when_deactivated = set_state("IDLE")
-    
-cv2.destroyAllWindows()
+if RASPBERRY_PI_CONNECTED:
+    cv2.destroyAllWindows()
