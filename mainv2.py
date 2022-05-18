@@ -5,6 +5,7 @@ from dtypes import *
 import os
 from utils import *
 from gpiozero import Button
+from signal import pause
 
 VIDEO_LENGTH = 1 * 60 * 60 # 1 hour (3600 seconds)
 FRAMERATE = 30 # Frames per second
@@ -28,7 +29,7 @@ class Capture:
         self.result = cv2.VideoWriter('video/' + self.name + '.mp4', cv2.VideoWriter_fourcc(*'MP4V'), FRAMERATE, self.size) # Result video
         self.buffer = FrameQueue(FRAMERATE * VIDEO_LENGTH) # Buffer queue to contain the last n frames, where n = framerate * video length
         self.trigger = trigger
-        trigger.when_released = self.stop
+        self.trigger.when_released = self.stop
         
         while self.vid.isOpened() and self.running:
             self.ret, self.frame = self.vid.read()
@@ -43,7 +44,6 @@ class Capture:
             if not RASPBERRY_PI_CONNECTED:
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
-            print("running")
             
         # clean_files(KEEP_TIME, MAX_FOOTAGE_SIZE)
 
@@ -75,14 +75,14 @@ def start_video():
 def stop_video():
     print("stopping")
     global cap
-    del cap
+    if cap:
+        cap.stop()
     
 # Detect when the vehicle is running
 if RASPBERRY_PI_CONNECTED:
     vehicle_on.when_pressed = start_video
     vehicle_on.when_released = stop_video
-    while True:
-        pass
+    pause()
 else:
     while True:
         print("waiting")
