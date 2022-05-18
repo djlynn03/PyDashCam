@@ -8,5 +8,5 @@ def stop():
     print("stopped")
 
 btn = Button(2)
-btn.when_activated = start
-btn.when_deactivated = stop
+btn.when_pressed = start
+btn.when_released = stop

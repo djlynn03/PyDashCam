@@ -22,7 +22,7 @@ vehicle_on = Button(2)
 def start_video():
     running = True
     print("starting")
-    vid = cv2.VideoCapture(0)
+    vid = cv2.VideoCapture(-1)
 
     size = (int(vid.get(cv2.CAP_PROP_FRAME_WIDTH)), int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT)))
     name = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -54,6 +54,7 @@ def start_video():
         if not RASPBERRY_PI_CONNECTED:
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
+        print("running")
             
         # clean_files(KEEP_TIME, MAX_FOOTAGE_SIZE)
 
@@ -65,7 +66,7 @@ def start_video():
     
 # Detect when the vehicle is running
 if RASPBERRY_PI_CONNECTED:
-    vehicle_on.when_pressed = start_video()
+    vehicle_on.when_pressed = start_video
     while True:
         pass
 else:
