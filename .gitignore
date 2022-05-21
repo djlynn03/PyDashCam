@@ -132,4 +132,4 @@ dmypy.json
 
 # Output videos
 *.mp4
-/video
+/video/.
