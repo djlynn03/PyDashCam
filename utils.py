@@ -18,11 +18,12 @@ def clean_files(keep_time, max_size):
     for f in os.listdir('video/'):
         if (os.path.isfile(os.path.join('video/', f)) and f.endswith('.mp4') and os.path.getmtime(os.path.join('video/', f)) < time.time() - keep_time):
             os.remove(os.path.join('video/', f))
+            print('Deleted: ' + f)
             
     while get_dir_size('video/') > (max_size * 1024 * 1024):
         # Delete oldest files until the size is less than max_size
-        
+
         # Get the oldest file
-        oldest = min(os.listdir('video/'), key=os.path.getmtime)
-        
-        os.remove(os.path.join('video/', oldest))
+        oldest = min(['video/' + f for f in os.listdir('video/')], key=os.path.getmtime)
+        os.remove(oldest)
+        print('Deleted: ' + oldest)
