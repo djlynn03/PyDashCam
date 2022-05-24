@@ -39,6 +39,7 @@ class Capture:
         self.trigger.when_released = self.stop
         
         self.num_frames = 0
+        # used elapsed time instead of FPS because it's more accurate
         while self.vid.isOpened() and self.running and self.trigger.is_pressed:
             self.ret, self.frame = self.vid.read()
 
