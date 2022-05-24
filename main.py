@@ -38,27 +38,28 @@ class Capture:
         self.trigger = trigger
         self.trigger.when_released = self.stop
         
-        self.num_frames = 0
+        self.start_time = datetime.datetime.now()
         # used elapsed time instead of FPS because it's more accurate
         while self.vid.isOpened() and self.running and self.trigger.is_pressed:
             self.ret, self.frame = self.vid.read()
 
             cv2.putText(self.frame, datetime.datetime.now().strftime("%m/%d/%y %H:%M:%S"), (5, int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
             
-            if self.num_frames >= VIDEO_LENGTH * FRAMERATE: # Start new video if the current one has reached the maximum length
+            # if datetime.timedelta(datetime.datetime.now() - self.start_time) == datetime.timedelta(seconds=VIDEO_LENGTH): # Start new video if the current one has reached the maximum length
+            # Start new video if the current one has reached the maximum length
+            if datetime.datetime.now() - self.start_time >= datetime.timedelta(seconds=VIDEO_LENGTH):
                 print("Starting new video...")
                 self.vid.release()
                 self.result.release()
                 self.create_video()
                 self.num_frames = 0
+                self.start_time = datetime.datetime.now()
+                clean_files(MAX_KEEP_TIME, MAX_FOOTAGE_SIZE)
                 print("New video created")
                 continue
                 
             self.result.write(self.frame)
-
-            clean_files(MAX_KEEP_TIME, MAX_FOOTAGE_SIZE)
             
-            self.num_frames += 1
 
         self.vid.release()
         self.result.release()
@@ -72,8 +73,8 @@ class Capture:
         print("stopping")
         self.running = False
         if REBOOT_ON_STOP:
-            print("rebooting...")
-            os.system("sudo shutdown -r now")
+            print("shutting down...")
+            os.system("sudo shutdown now")
         return
     
     def create_video(self):
@@ -82,17 +83,11 @@ class Capture:
         size = (VIDEO_WIDTH, VIDEO_HEIGHT) # default size is 640x480
         self.result = cv2.VideoWriter('video/' + name + '.mp4', cv2.VideoWriter_fourcc(*'mp4v'), FRAMERATE, size) # Result video        
 
-vehicle_on = Button(2)
-global cap 
-cap = None
-
-def start_video():
-    print("starting")
-    global cap
-    cap = Capture(vehicle_on)
+vehicle_on = Button(3)
+print("starting")
+cap = Capture(vehicle_on)
 
 # Detect when the vehicle is running
-vehicle_on.when_pressed = start_video
 
-print("Dashcam is running")
-pause()
+# print("Dashcam is running")
+# pause()
