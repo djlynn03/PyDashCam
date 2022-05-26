@@ -22,7 +22,11 @@ You can manually run the script with `python main.py`, but it will start automat
 1. We will need to access the vehicle's accessory power and the always-on power. The lighter socket is a good place to get accessory power, so you can splice a USB cable to get power from that. For the always-on power, you will need to use a fuse tap in the passenger fuse box. This will vary from vehicle to vehicle, so further research may be needed.
 2. After getting the necessary power sources, you will need to create a circuit to be used with the GPIO pins on the Raspberry Pi. The circuit is displayed below:<br/>
   ![circuit](circuit.png)<br/>
-  This circuit can be soldered into a HAT for the Raspberry Pi, or a standard PCB board. When current from the vehicle activates the transistor, GPIO 2 will be shorted to ground, which is detected by the script.
+  NOTE- The pin is actually GPIO 3 (pin 5), instead of pin 3<br/>
+  This circuit can be soldered into a HAT for the Raspberry Pi, or a standard PCB board. When current from the vehicle activates the transistor, GPIO 3 will be shorted to ground, which is detected by the script.
   
 # Troubleshooting
 - Make sure that enough power is supplied to the Raspberry Pi. It will need 5V with at least 2.5A.
+
+# Additional Information
+- The current draw for the GPIO transistor circuit is 1.55 mA
