@@ -1,5 +1,6 @@
 import cv2
 import datetime
+import time
 # from dtypes import *
 from utils import *
 from config import *
@@ -41,6 +42,7 @@ class Capture:
         self.start_time = datetime.datetime.now()
         # used elapsed time instead of FPS because it's more accurate
         while self.vid.isOpened() and self.running and self.trigger.is_pressed:
+            elapsed_start = datetime.datetime.now()
             self.ret, self.frame = self.vid.read()
 
             cv2.putText(self.frame, datetime.datetime.now().strftime("%m/%d/%y %H:%M:%S"), (5, int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
@@ -58,6 +60,8 @@ class Capture:
                 continue
                 
             self.result.write(self.frame)
+            
+            time.sleep(1/FRAMERATE - (datetime.datetime.now() - elapsed_start).total_seconds())
             
 
         self.vid.release()
