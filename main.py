@@ -60,9 +60,7 @@ class Capture:
                 continue
                 
             self.result.write(self.frame)
-            
-            time.sleep(1/FRAMERATE - (datetime.datetime.now() - elapsed_start).total_seconds())
-            
+                        
 
         self.vid.release()
         self.result.release()

@@ -1,4 +1,4 @@
-FRAMERATE = 30 # Frames per second
+FRAMERATE = 25 # Frames per second
 # This value is tricky because it is not always the same as the framerate of the camera
 # The camera I am using is supposed to be 30 fps, but 15 fps is the number that records correctly
 
