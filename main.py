@@ -1,6 +1,6 @@
 import cv2
 import datetime
-from dtypes import *
+# from dtypes import *
 from utils import *
 from config import *
 from gpiozero import Button
@@ -45,7 +45,6 @@ class Capture:
 
             cv2.putText(self.frame, datetime.datetime.now().strftime("%m/%d/%y %H:%M:%S"), (5, int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
             
-            # if datetime.timedelta(datetime.datetime.now() - self.start_time) == datetime.timedelta(seconds=VIDEO_LENGTH): # Start new video if the current one has reached the maximum length
             # Start new video if the current one has reached the maximum length
             if datetime.datetime.now() - self.start_time >= datetime.timedelta(seconds=VIDEO_LENGTH):
                 print("Starting new video...")
@@ -63,10 +62,6 @@ class Capture:
 
         self.vid.release()
         self.result.release()
-
-    # def save(self):
-    #     self.result.write(self.buffer.dequeue())
-    #     return self.result
     
     def stop(self):
         self.vid.release()
@@ -86,8 +81,3 @@ class Capture:
 vehicle_on = Button(3)
 print("starting")
 cap = Capture(vehicle_on)
-
-# Detect when the vehicle is running
-
-# print("Dashcam is running")
-# pause()

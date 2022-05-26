@@ -3,7 +3,7 @@ class Frame:
         self.frame = frame
         self.next = None
 
-
+# Queue can be used as a buffer to store frames if a maximum amount of frames is needed
 class FrameQueue:
     def __init__(self, maxsize):
         self.front = None

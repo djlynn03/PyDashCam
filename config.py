@@ -12,7 +12,7 @@ MAX_FOOTAGE_SIZE = 5000 # in MB
 # Maximum footage length and size can be specified. Any footage older that X seconds or larger than Y MB will be deleted.
 # Can be set to None to disable this feature.
 
-VIDEO_LENGTH = 30 # 30 seconds (in seconds)
+VIDEO_LENGTH = 60 # 30 seconds (in seconds)
 # Videos are recorded in chunks of X seconds so that there will be less storage overflow.
 
 REBOOT_ON_STOP = True
