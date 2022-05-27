@@ -42,7 +42,7 @@ class Capture:
         
         self.trigger = trigger
         self.trigger.when_released = self.stop
-        
+        self.oldname = ""
         self.start_time = datetime.datetime.now()
         # used elapsed time instead of FPS because it's more accurate
         
@@ -59,12 +59,14 @@ class Capture:
                 self.vid.release()
                 self.result.release()
                 
-                self.num_frames = 0
+                # self.num_frames = 0
                 self.start_time = datetime.datetime.now()
                 clean_files(MAX_KEEP_TIME, MAX_FOOTAGE_SIZE)
-                print("New video created")
-                thread = Thread(target=self.modify_video, args=(self.name, ))
+                self.oldname = self.name
                 self.create_video()
+                print("New video created")
+                thread = Thread(target=self.modify_video, args=(self.oldname, ))
+                
                 thread.start()
                 thread.join()
                 
@@ -85,6 +87,7 @@ class Capture:
             print("shutting down...")
             os.system("sudo shutdown now")
         return
+    
     def create_video(self):
         self.vid = cv2.VideoCapture(-1) # -1 automatically selects the camera
         self.name = 'video/' + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + '.mp4'
