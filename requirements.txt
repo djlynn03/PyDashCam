@@ -1,3 +1,4 @@
 opencv-python==4.5.5.64
 opencv-python-headless==4.5.5.64
 gpiozero==1.6.2
+moviepy==1.0.3

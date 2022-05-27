@@ -58,15 +58,16 @@ class Capture:
                 print("Starting new video...")
                 self.vid.release()
                 self.result.release()
-                self.create_video()
+                
                 self.num_frames = 0
                 self.start_time = datetime.datetime.now()
                 clean_files(MAX_KEEP_TIME, MAX_FOOTAGE_SIZE)
                 print("New video created")
-                
-                thread = Thread(target=self.modify_video, args=(self.result.get_filename(),))
+                thread = Thread(target=self.modify_video, args=(self.name, ))
+                self.create_video()
                 thread.start()
                 thread.join()
+                
                 print("video normalized")
                 continue
                 
@@ -84,12 +85,11 @@ class Capture:
             print("shutting down...")
             os.system("sudo shutdown now")
         return
-    
     def create_video(self):
         self.vid = cv2.VideoCapture(-1) # -1 automatically selects the camera
-        name = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        self.name = 'video/' + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + '.mp4'
         size = (VIDEO_WIDTH, VIDEO_HEIGHT) # default size is 640x480
-        self.result = cv2.VideoWriter('video/' + name + '.mp4', cv2.VideoWriter_fourcc(*'mp4v'), FRAMERATE, size) # Result video
+        self.result = cv2.VideoWriter(self.name, cv2.VideoWriter_fourcc(*'mp4v'), FRAMERATE, size) # Result video
         
     def modify_video(self, video):
         clip = VideoFileClip(video)
