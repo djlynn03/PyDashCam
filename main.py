@@ -41,6 +41,8 @@ class Capture:
         
         self.start_time = datetime.datetime.now()
         # used elapsed time instead of FPS because it's more accurate
+        
+        # TODO- make video record at 60 fps and edit later to make the video the correct length
         while self.vid.isOpened() and self.running and self.trigger.is_pressed:
             elapsed_start = datetime.datetime.now()
             self.ret, self.frame = self.vid.read()
