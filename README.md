@@ -23,10 +23,11 @@ You can manually run the script with `python main.py`, but it will start automat
 2. After getting the necessary power sources, you will need to create a circuit to be used with the GPIO pins on the Raspberry Pi. The circuit is displayed below:<br/>
   ![circuit](circuit.png)<br/>
   NOTE- The pin is actually GPIO 3 (pin 5), instead of pin 3<br/>
-  This circuit can be soldered into a HAT for the Raspberry Pi, or a standard PCB board. When current from the vehicle activates the transistor, GPIO 3 will be shorted to ground, which is detected by the script.
-  
+  This circuit can be soldered into a HAT for the Raspberry Pi, or a standard PCB board. When current from the vehicle activates the transistor, GPIO 3 will be shorted to ground, which is detected by the script. Shorting GPIO 3 to ground will also boot up the Raspberry Pi, so the device will turn on when the vehicle is in accessory mode.
+3. To convert the 12V DC from the car into 5V DC, you can use a lighter socket plug and connect the wires from the fuse tap to it (positive goes to the tip and the neutral goes on the side). Then, a USB cable can be used to power the Raspberry Pi.
+
 # Troubleshooting
 - Make sure that enough power is supplied to the Raspberry Pi. It will need 5V with at least 2.5A.
 
 # Additional Information
-- The current draw for the GPIO transistor circuit is 1.55 mA
+- The current draw for the GPIO transistor circuit is 1.55 mA on a 5V circuit, so it will not require very much power.
